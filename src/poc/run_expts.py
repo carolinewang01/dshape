@@ -8,7 +8,7 @@ from utils.helpers import str2bool
 from utils.cluster_helpers import submit_to_slurm, submit_to_condor
 from poc.run_agent import run_agent
 
-params = load_parameters()
+# params = load_parameters()
 paths = load_paths()
 
 def check_single_dir(savefile_dir):
