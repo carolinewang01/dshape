@@ -148,17 +148,17 @@ def run_gridworld_expts(trials=30, overwrite=False):
                   }
               } # 10000000 timesteps should be okay
 
-    subopt_demo_dict = {
-                10: {"subopt_step": 2},
-                20: {"subopt_step": 2},
-                30: {"subopt_step": 4}
-    }
+    # subopt_demo_dict = {
+    #             10: {"subopt_step": 2},
+    #             20: {"subopt_step": 2},
+    #             30: {"subopt_step": 4}
+    # }
     results_dir = paths['rl_demo']['gridworld_results_dir']
 
     for gridworld_size in [
-                           # 10, 
+                           10, 
                            20, 
-                           # 30
+                           30
                            ]:
         for exp_name, exp_params in exp_settings.items():
             # for i in range(1, 4):
@@ -166,10 +166,10 @@ def run_gridworld_expts(trials=30, overwrite=False):
             # for i in range(4, 10):
             #     demo_goal = gridworld_size-1-subopt_demo_dict[gridworld_size]["subopt_step"]*i
             #     exp_params["demo_goal"] = (0, demo_goal)
-            demo_goal = "15.0"
-            exp_params["demo_goal"] = (15, 0)
-            # savedir_name = f"{exp_name}_world=basic_size={gridworld_size}"
-            savedir_name = f"{exp_name}_demo-goal={demo_goal}_world=basic_size={gridworld_size}"
+            # demo_goal = "15.0"
+            # exp_params["demo_goal"] = (15, 0)
+            savedir_name = f"{exp_name}_world=basic_size={gridworld_size}"
+            # savedir_name = f"{exp_name}_demo-goal={demo_goal}_world=basic_size={gridworld_size}"
 
             for trial_idx in range(trials):
                 all_params = {
