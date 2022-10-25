@@ -1,4 +1,3 @@
-#!/scratch/cluster/clw4542/rlzoo/bin/python
 import os
 import copy
 import numpy as np
