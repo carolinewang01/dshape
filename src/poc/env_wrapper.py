@@ -179,5 +179,4 @@ class TimeFeatureWrapper(Wrapper):
         Concatenate the time feature to the current observation.
         """
         time_feature = self._current_step
-        # print("TIME FEAT IS ", time_feature)
         return tuple([obs_i for obs_i in obs] + [time_feature])

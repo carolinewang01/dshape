@@ -88,7 +88,6 @@ Error = {condor_log_dir}/{job_name}_$(CLUSTER).err
 Output = {condor_log_dir}/{job_name}_$(CLUSTER).out
 Log = {condor_log_dir}/{job_name}_$(CLUSTER).log
 
-Notify_user = caroline.l.wang@utexas.edu
 Notification = Never
 
 arguments = \

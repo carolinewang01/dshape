@@ -19,8 +19,8 @@ class DiscreteAgent():
         # random initialization
         # self.q_table = np.random.uniform(low=-0.1, high=0.1, size=shape)
         
-        self.epsilon = epsilon # 0.05
-        self.alpha = alpha # 0.1
+        self.epsilon = epsilon
+        self.alpha = alpha
         self.gamma = gamma
         self.init_value = init_value
 

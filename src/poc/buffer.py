@@ -130,18 +130,13 @@ class HERBufferWrapper(): # based heavily on sb2 HER implementation
         return goals
 
     def _store_episode(self):
-        # print("storing episode")
         for transition in self.episode_transitions:
             self.replay_buffer.add(*transition)
             sampled_goals = self._sample_achieved_goals()
 
             for goal_t, goal_tp1 in sampled_goals:
-                # print("ENTER RELABEL LOOP")
                 # deepcopy not needed because obses are tuples which are immutables
                 obs, action, reward, next_obs, done = transition
-                # print("ORIG OBS IS ", obs)
-                # print("ORIG REW IS ", reward)
-                # print("GOAL IS ", goal_t) 
                 # get desired goal
                 obs, next_obs = list(obs), list(next_obs)
                 obs[-2:] = goal_t
@@ -152,11 +147,6 @@ class HERBufferWrapper(): # based heavily on sb2 HER implementation
                     old_goal_state=obs[-2:], new_goal_state=next_obs[-2:])
 
                 obs, next_obs = tuple(obs), tuple(next_obs)
-                # print("RELABELLED OBS IS ", obs)
-                # print("NEW REWARD IS ", reward)
-                # print("ORIG OBS IS ", transition[0])
-                # print("ORIG REW IS ", transition[2])
-
                 self.replay_buffer.add(obs, action, reward, next_obs, done)
 
 

@@ -61,7 +61,6 @@ class GridWorld(Env):
         # Store previous location
         info = {}
         last_location = self.state
-        # TODO: WITH PROBABILITY 20%, CHANGE ACTION
         
         if np.random.uniform(0,1) < self.random_action_prob:
             available_actions = self.get_available_actions()
@@ -105,7 +104,7 @@ class GridWorld(Env):
 
         done = self.check_done()
         self.current_step += 1         
-        return self.state, reward, done, info # TODNO: return next ob, reward, done, info
+        return self.state, reward, done, info
 
     def get_available_actions(self):
         """Returns possible actions"""
@@ -160,7 +159,6 @@ class GridWorld(Env):
 
         return soln_path, soln_rew
         
-    # TODO: PUT INTO RENDER
     def render(self):
         pass
 

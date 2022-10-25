@@ -185,44 +185,8 @@ def newest(path):
     files = os.listdir(path)
     paths = [os.path.join(path, basename) for basename in files]
     return max(paths, key=os.path.getctime)
-#################
-
-def display_frames_as_gif(frames):
-    """
-    Displays a list of frames as a gif, with controls
-    """
-    #plt.figure(figsize=(frames[0].shape[1] / 72.0, frames[0].shape[0] / 72.0), dpi = 72)
-    patch = plt.imshow(frames[0])
-    plt.axis('off')
-
-    def animate(i):
-        patch.set_data(frames[i])
-
-    anim = animation.FuncAnimation(plt.gcf(), animate, frames = len(frames), interval=50)
-    display(display_animation(anim, default_mode='loop'))
-
-
-def render_trajectory(env, actions):
-    """Render the given sequence of actions for an environment in a Jupyter notebook
-    # this currently renders the random policy 
-    """
-    from mujoco_py import GlfwContext
-    GlfwContext(offscreen=True)  # Create a window to init GLFW.
-
-    for t in range(100):
-        # Render into buffer.     
-        frames.append(env.render(mode = 'rgb_array'))
-        action = env.action_space.sample()
-        observation, reward, done, info = env.step(action)
-        if done:
-            break
-    env.close()
-    display_frames_as_gif(frames)
-
 
 def df_to_latex(df: pd.DataFrame):
     writer = pytablewriter.LatexTableWriter()
     writer.from_dataframe(df)
     writer.write_table()
-
-    return
