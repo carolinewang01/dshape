@@ -1,0 +1,12 @@
+train_sample_paths:
+  log_dir: "expert_traj/log/"
+  model_ckpt_dir: "expert_traj/checkpoint/"
+  trained_model_loc_dir: "expert_traj/log/trained_model_locs"
+  sample_save_dir: "../data/expert_full_traj/" # directory to save sampled trajectories
+  joint_angles_save_dir: "../data/expert_joint_angle_traj/" # directory to save raw state trajectories
+  # random_save_dir: "../data/random_traj" 
+rl_demo: 
+  # results_dir: "/scratch/cluster/clw4542/temp/"
+  results_dir: "/scratch/cluster/clw4542/dshape_td3_results/"
+  gridworld_results_dir: "/scratch/cluster/clw4542/gridworld_results2/" # "/scratch/cluster/clw4542/gridworld_results/"
+  hyperparam_results_dir: "/scratch/cluster/clw4542/hyperparam_search/"

@@ -1,0 +1,4 @@
+imit_rew_coef: .5
+alpha: 0.1
+beta: 0.2
+gamma: 0.3

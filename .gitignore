@@ -1,7 +1,6 @@
 env/*
 results/*
 data/*
-confs/*
 data/expert_full_traj/*
 data/random_traj/*
 src/expert_traj/log/*

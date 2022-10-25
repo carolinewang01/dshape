@@ -1,0 +1,291 @@
+training:
+  seeds: [982, 108, 329, 1548, 1048, 671, 1938, 7, 18, 482, 
+          293, 374, 92410, 582731, 47115, 112368, 194720, 432091, 196815, 881725, 
+          158753, 210913, 468906, 971222,  53309, 428189, 748136, 433013, 186730, 497077, 
+          504894, 673077, 242911, 111970, 596767, 116134, 367491]
+  pointworld:
+    max_timesteps: 50000
+    save_per_iter: 1 # units 1k ts
+  reacher:
+    max_timesteps: 200000
+    save_per_iter: 5 # units 1k ts
+    rew_delay: 5
+    sin_cos_repr: False
+  swimmer:
+    max_timesteps: 500000
+    save_per_iter: 5 # units 1k ts
+    rew_delay: 20
+    sin_cos_repr: False
+  ant:
+    max_timesteps: 3.e+6
+    save_per_iter: 25 # units 1k ts
+    rew_delay: 20
+    sin_cos_repr: False
+  halfcheetah:
+    max_timesteps: 3.e+6
+    save_per_iter: 25 # units 1k ts
+    rew_delay: 20
+    sin_cos_repr: False
+  hopper:
+    max_timesteps: 3.e+6
+    save_per_iter: 25 # units 1k ts
+    rew_delay: 20
+    sin_cos_repr: False
+  walker2d:
+    max_timesteps: 3.e+6
+    save_per_iter: 25 # units 1k ts
+    rew_delay: 20
+    sin_cos_repr: False
+eval: 
+  n_eval_episodes: 64
+  ckpt_options: ["last", "best"] # ["best"] # ["best", "all"] # options ["best", "all", "last"]
+  save_tb_logs: False
+  eval_freq: # units are ts
+    pointworld: 1000 # 2500
+    reacher: 5000
+    swimmer: 5000
+    ant: 25000
+    hopper: 25000
+    walker2d: 25000
+    halfcheetah: 25000
+td3: # params are largely defaults from the td3 paper
+# Note that learning starts is counted into total timesteps, and actions are sampled uniformly from env
+  pointworld: # tuned
+    batch_size: 256
+    buffer_size: 2000
+    gamma: 0.99
+    learning_starts: 500
+    learning_rate: 3.e-4
+    policy_delay: 2
+    tau: 0.005
+    gradient_steps: 100
+    # train_freq: 300
+  reacher: # tuned
+    batch_size: 256
+    buffer_size: 1.e+5 
+    gamma: 0.99
+    learning_starts: 100 # 10000 
+    learning_rate: 3.e-4
+    policy_delay: 2
+    tau: 0.005
+    gradient_steps: 100
+    # train_freq: 300
+  swimmer: 
+    batch_size: 256
+    buffer_size: 1.e+6
+    gamma: 0.99
+    learning_starts: 100 # 1500 #00 # actually 25k in original td3 paper but this shouldn't matter much
+    learning_rate: 3.e-4
+    policy_delay: 2
+    tau: 0.005
+    gradient_steps: 100
+  ant:  
+    batch_size: 256
+    buffer_size: 1.e+6
+    gamma: 0.99
+    learning_starts: 100 # 10000
+    learning_rate: 3.e-4
+    policy_delay: 2
+    tau: 0.005
+    gradient_steps: 100
+  halfcheetah: 
+    batch_size: 256
+    buffer_size: 1.e+6
+    gamma: 0.99
+    learning_starts: 100 # 10000
+    learning_rate: 3.e-4
+    policy_delay: 2
+    tau: 0.005
+    gradient_steps: 100
+  hopper: 
+    batch_size: 256
+    buffer_size: 1.e+6
+    gamma: 0.99
+    learning_starts: 100 # 10000
+    learning_rate: 3.e-4
+    policy_delay: 2
+    tau: 0.005
+    gradient_steps: 100
+  walker2d:
+    batch_size: 256
+    buffer_size: 1.e+6
+    gamma: 0.99
+    learning_starts: 100 # 10000
+    learning_rate:  3.e-4
+    policy_delay: 2
+    tau: 0.005
+    gradient_steps: 100
+
+sac: # params are largely defaults from the sac paper
+# Note that learning starts is counted into total timesteps, and actions are sampled uniformly from env
+  pointworld: # tuned
+    batch_size: 256
+    buffer_size: 2000
+    ent_coef:  0.2
+    gamma: 0.99
+    learning_starts: 100
+    learning_rate: 3.e-4
+  reacher: # tuned
+    batch_size: 256
+    buffer_size: 100000
+    ent_coef: 0.2
+    gamma: 0.99
+    learning_starts: 100 # 10000
+    learning_rate: 3.e-4
+    # train_freq: 300
+  swimmer: 
+    batch_size: 256
+    buffer_size: 1.e+7
+    ent_coef: 0.2
+    gamma: 0.99
+    learning_starts: 10000
+    learning_rate: 3.e-4
+  ant:  
+    batch_size: 256
+    buffer_size: 1.e+7
+    ent_coef: 0.2 #'auto'
+    gamma: 0.99
+    learning_starts: 10000
+    learning_rate: 3.e-4
+  halfcheetah: 
+    batch_size: 256
+    buffer_size: 1.e+7
+    ent_coef: 'auto'
+    gamma: 0.99
+    learning_starts: 10000
+    learning_rate: 3.e-4
+  hopper: 
+    batch_size: 256
+    buffer_size: 1.e+7
+    ent_coef: 0.2 #'auto'
+    gamma: 0.99
+    learning_starts: 10000
+    learning_rate: 3.e-4
+  walker2d:
+    batch_size: 256
+    buffer_size: 1.e+7
+    ent_coef: 'auto'
+    gamma: 0.99
+    learning_starts: 10000
+    target_update_interval: 1
+    learning_rate:  3.e-4
+rew_shaping:
+  pointworld:
+    full:
+      dist_std: null
+      alpha: null
+      gamma: null
+      imit_rew_coef: null      
+  reacher:
+    raw:
+      dist_std: 5.274018978447073 
+      alpha: 0.99
+      gamma: 0.9
+      imit_rew_coef: 0.01 
+    full:
+      dist_std: 144.48814933030485 # scaling factor for squared distances from expert demo 
+      alpha: 0.4
+      gamma: 0.2
+      imit_rew_coef: 0.01 
+  swimmer:
+    raw:
+      dist_std: 4.474695221805011
+      alpha: 1 # 0.6
+      gamma: 0.8 # 0.01
+      imit_rew_coef: 0.2 # 0.2 
+    full:
+      dist_std: 25.073859190791964
+      alpha: 0.1
+      gamma: 1
+      imit_rew_coef: 0.01 
+      dist_scale: 0.6
+      tau: 0.8
+  ant:  
+    raw:
+      dist_std: 0.9529886938299934
+      alpha: 0.8 # 0.7
+      gamma: 0.4 # 0.5
+      imit_rew_coef: 0.2 # 0.3
+    full:
+      dist_std: 171.93150231680488 
+      alpha: 0.4
+      gamma: 0.8
+      imit_rew_coef: 0.3
+      dist_scale: 0.01
+      tau: 0.99
+  walker2d:
+    raw:
+      dist_std: 1.7760512540989022
+      alpha: 0.9 # 0.5
+      gamma: 0.01 # 0.3
+      imit_rew_coef: 0.2 #3 0.4 
+    full:
+      dist_std: 263.30128388333077 
+      alpha: 0.01
+      gamma: 0.2
+      imit_rew_coef: 0.3
+      dist_scale: 0.4
+      tau: 0.4
+  hopper:
+    raw:
+      dist_std: 0.31886837910172094 
+      alpha: 0.2 # 0.01
+      gamma: 0.1 # 0.4
+      imit_rew_coef: 0.2 # 0.4 
+    full:
+      dist_std: 26.245493994870102 
+      alpha: 1
+      gamma: 0.9
+      imit_rew_coef: 0.2
+      dist_scale: 0.01
+      tau: 0.6
+  halfcheetah:
+    raw:
+      dist_std: 1.0052911493143915 
+      alpha: 0.4 # 0.1
+      gamma: 0.6 # 0.8
+      imit_rew_coef: 0.2 # 0.1
+    full:
+      dist_std: 404.35885329529344 
+      alpha: 0.4
+      gamma: 0.1
+      imit_rew_coef: 0.1
+      dist_scale: 0.99
+      tau: 0.99
+pbrs:
+  terminal_phi0: True
+baseline_rl:
+  hidden_size: 64
+her_demo: 
+  expt_name: "dshape"
+  demo_algo: 
+    reacher:
+      optimal: "sac-best"
+      medium: "sac-ts=20000"
+      worst: "sac-ts=5000"
+      random: "random"
+    swimmer: 
+      optimal: "sac-best"
+      medium: "sac-ts=40000"
+      worst: "sac-ts=20000"
+      random: "random"
+    ant:
+      optimal: "sac-long"
+      medium: "sac-ts=1199000"
+      worst: "sac-ts=599000"
+      random: "random"
+    hopper:
+      optimal: "sac-long"
+      medium: "sac-ts=2999000"
+      worst: "sac-ts=599000"
+      random: "random"
+    walker2d:
+      optimal: "sac-best"
+      medium: "sac-ts=850000"
+      worst: "sac-ts=400000"
+      random: "random"
+    halfcheetah:
+      optimal: "sac-long"
+      medium: "sac-ts=1799000"
+      worst: "sac-ts=599000"
+      random: "random"
