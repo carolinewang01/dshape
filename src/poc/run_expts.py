@@ -8,7 +8,6 @@ from utils.helpers import str2bool
 from utils.cluster_helpers import submit_to_slurm, submit_to_condor
 from poc.run_agent import run_agent
 
-# params = load_parameters()
 paths = load_paths()
 
 def check_single_dir(savefile_dir):
@@ -51,50 +50,48 @@ def run_gridworld_expts(trials=30, overwrite=False):
         "show_progress": True, 
     }
 
-    dshape_agent_path = f"/scratch/cluster/clw4542/gridworld_results2/dshape_termphi0=False_world=basic_size=20/trial=0/q-table_eval=last.npz"
-    pbrs_agent_path = f"/scratch/cluster/clw4542/gridworld_results2/pbrs+state-aug_termphi0=False_world=basic_size=20/trial=0/q-table_eval=last.npz"
     exp_settings = {
-        # "q-learning_termphi0=False": {
-        #     "termphi0": False
-        # },
-        # "dshape_termphi0=False": {
-        #     "reward_type": "pbrs_demo",
-        #     "demo_style": "lower",
-        #     "state_aug": True, 
-        #     "relabel": True,
-        #     "termphi0": False 
-        #               },
-        # "pbrs_alone_termphi0=False": {
-        #     "reward_type": "pbrs_demo",
-        #     "demo_style": "lower",
-        #     "termphi0": False
-        # },
-        # "pbrs+state-aug_termphi0=False":{
-        #     "reward_type": "pbrs_demo", 
-        #     "demo_style": "lower",
-        #     "state_aug": True,
-        #     "termphi0": False
-        # },
-        # "ridm-state-aug-alone_termphi0=False": {
-        #     "demo_style": "lower",
-        #     "state_aug": True,
-        #     "termphi0": False
-        # },
-        # "sbs_termphi0=False": {
-        #     "reward_type": "sbs",
-        #     "demo_style": "lower",
-        #     "state_aug": False,
-        #     "rew_coef": 1,
-        #     "dist_scale": 10,
-        #     "termphi0": False
-        # },
-        # "manhattan_termphi0=False": {
-        #     "reward_type": "manhattan",
-        #     "demo_style": "lower",
-        #     "state_aug": False,
-        #     "rew_coef": 1.0,
-        #     "termphi0": False
-        # },
+        "q-learning_termphi0=False": {
+            "termphi0": False
+        },
+        "dshape_termphi0=False": {
+            "reward_type": "pbrs_demo",
+            "demo_style": "lower",
+            "state_aug": True, 
+            "relabel": True,
+            "termphi0": False 
+                      },
+        "pbrs_alone_termphi0=False": {
+            "reward_type": "pbrs_demo",
+            "demo_style": "lower",
+            "termphi0": False
+        },
+        "pbrs+state-aug_termphi0=False":{
+            "reward_type": "pbrs_demo", 
+            "demo_style": "lower",
+            "state_aug": True,
+            "termphi0": False
+        },
+        "ridm-state-aug-alone_termphi0=False": {
+            "demo_style": "lower",
+            "state_aug": True,
+            "termphi0": False
+        },
+        "sbs_termphi0=False": {
+            "reward_type": "sbs",
+            "demo_style": "lower",
+            "state_aug": False,
+            "rew_coef": 1,
+            "dist_scale": 10,
+            "termphi0": False
+        },
+        "manhattan_termphi0=False": {
+            "reward_type": "manhattan",
+            "demo_style": "lower",
+            "state_aug": False,
+            "rew_coef": 1.0,
+            "termphi0": False
+        },
 
         # 20 x 20 GRIDWORLD ONLY EXPTS
         # # coeff study
@@ -113,92 +110,14 @@ def run_gridworld_expts(trials=30, overwrite=False):
         #     "termphi0": False,
         # },
 
-        "pbrs_alone": {
-            "reward_type": "pbrs_demo",
-            "demo_style": "lower",
-            # "termphi0": False
-        },
-
-        ## transfer learning experiment on 20x20 gridworld ###
-        # "dshape_termphi0=False_demo-goal=15_grid-goal=15": { # learn from scratch
-        #     "gridworld_goal": (0, 15),
-        #     "demo_goal": (0, 15),
+        # "pbrs_alone": {
         #     "reward_type": "pbrs_demo",
         #     "demo_style": "lower",
-        #     "state_aug": True, 
-        #     "relabel": True, 
-        #     "termphi0": False
-        # },
-        # "dshape_termphi0=False_demo-goal=17_grid-goal=17": {
-        #     "gridworld_goal": (0, 17),
-        #     "demo_goal": (0, 17),
-        #     "reward_type": "pbrs_demo",
-        #     "demo_style": "lower",
-        #     "state_aug": True, 
-        #     "relabel": True,
-        #     "termphi0": False 
-        # },
-        # "dshape_termphi0=False_demo-goal=15_grid-goal=15_transfer-learn": { # learn from transfer
-        #     "load_saved_agent": True,
-        #     "load_agent_path": dshape_agent_path,
-        #     "gridworld_goal": (0, 15),
-        #     "demo_goal": (0, 15),
-        #     "reward_type": "pbrs_demo",
-        #     "demo_style": "lower",
-        #     "state_aug": True, 
-        #     "relabel": True,
-        #     "termphi0": False 
-        # },
-        # "dshape_termphi0=False_demo-goal=17_grid-goal=17_transfer-learn": {
-        #     "load_saved_agent": True,
-        #     "load_agent_path": dshape_agent_path,
-        #     "gridworld_goal": (0, 17),
-        #     "demo_goal": (0, 17),
-        #     "reward_type": "pbrs_demo",
-        #     "demo_style": "lower",
-        #     "state_aug": True, 
-        #     "relabel": True,
-        #     "termphi0": False 
-        # },
-        # "pbrs+state-aug_termphi0=False_demo-goal=15_grid-goal=15":{ # learn from scratch
-        #     "gridworld_goal": (0, 15),
-        #     "demo_goal": (0, 15),
-        #     "reward_type": "pbrs_demo", 
-        #     "demo_style": "lower",
-        #     "state_aug": True,
-        #     "termphi0": False
-        # },
-        # "pbrs+state-aug_termphi0=False_demo-goal=17_grid-goal=17":{
-        #     "gridworld_goal": (0, 17),
-        #     "demo_goal": (0, 17),
-        #     "reward_type": "pbrs_demo", 
-        #     "demo_style": "lower",
-        #     "state_aug": True,
-        #     "termphi0": False
-        # },
-        # "pbrs+state-aug_termphi0=False_demo-goal=15_grid-goal=15_transfer-learn":{ # learn from transfer
-        #     "load_saved_agent": True,
-        #     "load_agent_path": pbrs_agent_path,
-        #     "gridworld_goal": (0, 15),
-        #     "demo_goal": (0, 15),
-        #     "reward_type": "pbrs_demo", 
-        #     "demo_style": "lower",
-        #     "state_aug": True,
-        #     "termphi0": False
-        # },
-        # "pbrs+state-aug_termphi0=False_demo-goal=17_grid-goal=17_transfer-learn":{
-        #     "load_saved_agent": True,
-        #     "load_agent_path": pbrs_agent_path,
-        #     "gridworld_goal": (0, 17),
-        #     "demo_goal": (0, 17),
-        #     "reward_type": "pbrs_demo", 
-        #     "demo_style": "lower",
-        #     "state_aug": True,
-        #     "termphi0": False
+        #     # "termphi0": False
         # },
 
         # EXPTS TO GEN STATE VISITATION PLOTS
-        # "dshape_demo-goal=19_grid-goal=19": { # learn from scratch
+        # "dshape_demo-goal=19_grid-goal=19": {
         #     "gridworld_goal": (0, 19),
         #     "demo_goal": (0, 19),
         #     "reward_type": "pbrs_demo",
@@ -206,14 +125,13 @@ def run_gridworld_expts(trials=30, overwrite=False):
         #     "state_aug": True, 
         #     "relabel": True 
         # },
-        # "pbrs+state-aug_demo-goal=19_grid-goal=19":{ # learn from scratch
+        # "pbrs+state-aug_demo-goal=19_grid-goal=19":{
         #     "gridworld_goal": (0, 19),
         #     "demo_goal": (0, 19),
         #     "reward_type": "pbrs_demo", 
         #     "demo_style": "lower",
         #     "state_aug": True,
         # },
-
     }
 
     world_dependent_params = {
@@ -267,8 +185,9 @@ def run_gridworld_expts(trials=30, overwrite=False):
                     logs_present = check_single_dir(save_path)
                     if logs_present: continue
 
+                run_dir = os.path.dirname(os.path.abspath(__file__))
                 submit_to_condor(env_id=f"{gridworld_size} gridworld", 
-                                 exec_cmd="/scratch/cluster/clw4542/dshape/src/poc/run_agent.py",
+                                 exec_cmd=os.path.join(run_dir, "run_agent.py"),
                                  results_dir=results_dir, 
                                  job_name=savedir_name,
                                  expt_params=all_params, 
