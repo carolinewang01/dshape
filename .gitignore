@@ -1,0 +1,17 @@
+env/*
+results/*
+data/*
+confs/*
+data/expert_full_traj/*
+data/random_traj/*
+src/expert_traj/log/*
+src/expert_traj/checkpoint/*
+src/expert_traj/temp/*
+src/expert_traj/results/*
+notebooks/.ipynb_checkpoints/*
+figures/*
+workshop_figures/*
+*.pyc
+*.class
+*.DS_Store
+__pycache__/*

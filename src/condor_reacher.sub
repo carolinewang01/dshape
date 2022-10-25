@@ -1,0 +1,20 @@
+Executable = /u/clw4542/research/rl_ifo_mujoco/src/rl_demo/ppo_demo.py 
+Universe = vanilla
+Getenv = true
++GPUJob = true
+Requirements = (TARGET.GPUSlot)
+
++Group = "GRAD" 
++Project = "AI_ROBOTICS"
++ProjectDescription = "ppo+demo exp Reacher"
+
+Input = /dev/null
+Error = /scratch/cluster/clw4542/rl_demo_results_final/raw_demo_aug_rl_displace-t=1_demo=sac/ppo2_Reacher_$(CLUSTER).err
+Output = /scratch/cluster/clw4542/rl_demo_results_final/raw_demo_aug_rl_displace-t=1_demo=sac/ppo2_Reacher_$(CLUSTER).out
+Log = /scratch/cluster/clw4542/rl_demo_results_final/raw_demo_aug_rl_displace-t=1_demo=sac/ppo2_Reacher_$(CLUSTER).log
+
+Notify_user = caroline.l.wang@utexas.edu
+Notification = Error
+
+arguments = --task raw_demo_aug_rl --env_id Reacher-v2 --algo ppo2
+Queue 1
