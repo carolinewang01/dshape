@@ -48,14 +48,19 @@ def argparser():
     # demo details
     parser.add_argument('--demo_style', type=str,
                         choices=["lower", "middle", "upper"], default="lower")
-    parser.add_argument('--demo_extend_type', type=str, default="extend_last")
     parser.add_argument('--demo_goal', type=int, nargs="+", default=None)
+    parser.add_argument('--demo_num_missing', type=int, default=0)
+
+    parser.add_argument('--demo_extend_type', type=str, choices=["extend_last", "extend_all"], default="extend_last")
+    parser.add_argument('--demo_extend_num', type=int, default=0)
+
 
     # imitation algo params
     parser.add_argument('--state_aug', type=str2bool, default=False)
     parser.add_argument('--relabel', type=str2bool, default=False)
     parser.add_argument('--n_sampled_goal', type=int, default=3)
     parser.add_argument('--rew_coef', type=float, default=1.0) 
+    parser.add_argument('--potential_const', type=float, default=0.0) 
     parser.add_argument('--dist_scale', type=float, default=1.0)
     # logging stuff
     parser.add_argument('--eval_interval', type=int, default=2500)
@@ -74,8 +79,8 @@ def argparser():
 
 
 def make_env(gridworld_size, gridworld_goal=None, reward_base_value=-1,
-             reward_type=None, rew_coef=1, dist_scale=1,
-             demo_style=None, demo_goal=None,
+             reward_type=None, rew_coef=1, potential_const=0, dist_scale=1,
+             demo_style=None, demo_goal=None, demo_num_missing=0,
              demo_extend_type=None, demo_extend_num=None,
              negate_potential=False, termphi0=True,
              state_aug=False, time_feat=True,
@@ -88,16 +93,21 @@ def make_env(gridworld_size, gridworld_goal=None, reward_base_value=-1,
 
     if time_feat:
         env = TimeFeatureWrapper(env, max_steps_per_episode)
-    if reward_type in ["pbrs_demo", "sbs", "manhattan"] or state_aug:
+    if reward_type in ["pbrs_demo", "pbrs_demo_euclidean", "sbs", "manhattan"] or state_aug:
         base_demo, _ = env.generate_solution(goal=demo_goal,
                                              style=demo_style)
+        if demo_num_missing > 0:
+            mid_idx = len(base_demo) // 2
+            base_demo = base_demo[:mid_idx] + base_demo[mid_idx+demo_num_missing:]
         # TODO: make default extension behavior repeating the last state
         demo = extend_demo(base_demo, max_steps_per_episode,
-                           demo_extend_type, demo_extend_num)
+                           demo_extend_type, demo_extend_num=demo_extend_num if demo_extend_num != 0 else None)
 
         env = DemoWrappedGridworld(env, demo=demo,
                                    reward_type=reward_type,
-                                   rew_coef=rew_coef, dist_scale=dist_scale,
+                                   rew_coef=rew_coef, 
+                                   potential_const=potential_const,
+                                   dist_scale=dist_scale,
                                    negate_potential=negate_potential,
                                    state_aug=state_aug,
                                    termphi0=termphi0)
@@ -122,8 +132,8 @@ def run_agent(gridworld_size, gridworld_goal=None,
               total_train_ts=250000, max_steps_per_episode=500,
               epsilon=0.05, alpha=0.1,
               init_value=0,
-              reward_type=None, rew_coef=1, dist_scale=1,
-              demo_style=None, demo_goal=None,
+              reward_type=None, rew_coef=1, potential_const=0, dist_scale=1,
+              demo_style=None, demo_goal=None, demo_num_missing=0,
               demo_extend_type="extend_last", demo_extend_num=None,
               negate_potential=False, termphi0=True,
               state_aug=False, time_feat=True,
@@ -144,9 +154,11 @@ def run_agent(gridworld_size, gridworld_goal=None,
     seeds = params["training"]["seeds"]
     env, opt_rew = make_env(gridworld_size, gridworld_goal=gridworld_goal, 
                             reward_base_value=reward_base_value,
-                            reward_type=reward_type, rew_coef=rew_coef, dist_scale=dist_scale,
+                            reward_type=reward_type, rew_coef=rew_coef, potential_const=potential_const, 
+                            dist_scale=dist_scale,
                             demo_style=demo_style, demo_goal=tuple(
                                 demo_goal) if demo_goal is not None else None,
+                            demo_num_missing=demo_num_missing,
                             demo_extend_type=demo_extend_type, demo_extend_num=demo_extend_num,
                             negate_potential=negate_potential, termphi0=termphi0,
                             state_aug=state_aug, time_feat=time_feat,

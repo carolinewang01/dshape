@@ -35,7 +35,7 @@ class GridWorld(Env):
         self.action_dict = {'UP':0, 'DOWN':1, 'LEFT':2, 'RIGHT':3}
         self.actions = [0, 1, 2, 3]
         # Set probbility of a random action being taken
-        self.random_action_prob = 0
+        self.random_action_prob = 0.0
     
     @property
     def observation_space(self):

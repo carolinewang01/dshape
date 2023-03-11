@@ -9,7 +9,7 @@ from envs.goal_demo_wrapper import GoalDemoWrapper
 from envs.demo_wrapper import DemoWrapper
 from envs.sparsifier_wrapper import SparsifyWrapper
 
-from poc.utils import extend_demo
+from poc.poc_utils import extend_demo
 from poc.pointworld_env import PointWorld
 
 from utils.load_confs import load_parameters, load_paths
@@ -23,7 +23,7 @@ RESULTS_DIR = paths['rl_demo']['results_dir']
 def generate_demo(env, max_episode_steps):
     base_demo, demo_return = env.unwrapped.generate_solution()
     demo = np.array(extend_demo(base_demo, max_episode_steps,
-                                extension_type="demo",
+                                extension_type="extend_last",
                                 time_feat=True
                                 ))
     return demo, demo_return
@@ -117,8 +117,8 @@ def train_sac(task_vars, task_log_name,
 
 def train_td3(task_vars, task_log_name, 
               env_size, goal, max_episode_steps, 
-              gradient_steps=1,
-              policy_delay=2,
+              # gradient_steps=1,
+              # policy_delay=2,
               sparse_rew=True,
               rew_base_value=-1,
               early_term=True,
@@ -142,8 +142,8 @@ def train_td3(task_vars, task_log_name,
           task_name=task_log_name,
           save_tb_logs=params["eval"]["save_tb_logs"],
           save_checkpoints=params["eval"]["ckpt_options"],
-          gradient_steps=gradient_steps,
-          policy_delay=policy_delay,
+          # gradient_steps=gradient_steps,
+          # policy_delay=policy_delay,
           run_id=run_id)
 
     env.close()
@@ -325,7 +325,7 @@ def train_her_td3(task_vars, task_log_name,
     n_actions = env.action_space.shape[-1]
     action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.1 * np.ones(n_actions))
 
-    model = HER(policy=MlpPolicy, env=env, model_class=TD3,
+    model = HER(policy=CustomPolicy, env=env, model_class=TD3,
                 n_sampled_goal=n_sampled_goal,
                 goal_selection_strategy=KEY_TO_GOAL_STRATEGY[goal_sampling_strategy],
                 total_timesteps=50000, # int(params_algo["max_timesteps"]),

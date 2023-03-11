@@ -62,7 +62,7 @@ def vis_state_traj(state_trajs:dict, goal, env_size,
                  alpha=0.4,
                  lw=0.5)
                 )
-
+    # ax.set_xlim()
     ax.set_title(f"{env_size}x{env_size} Pointworld, Ckpt={ckpt_name}")
     ax.legend()
 
@@ -124,7 +124,7 @@ def visualize(base_path, expt_dict, algo_name="sac",
                     ckpt_name=ckpt_name,
                     color_dict=color_dict,
                     expert_demo=exp_demo, 
-                    show_rect=False)
+                    show_rect=True)
     
     ### plot learning curves and goal dists
     for expt_name, expt_settings in expt_dict.items():

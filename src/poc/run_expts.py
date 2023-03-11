@@ -54,6 +54,7 @@ def run_gridworld_expts(trials=30, overwrite=False):
     dshape_agent_path = f"/scratch/cluster/clw4542/gridworld_results2/dshape_termphi0=False_world=basic_size=20/trial=0/q-table_eval=last.npz"
     pbrs_agent_path = f"/scratch/cluster/clw4542/gridworld_results2/pbrs+state-aug_termphi0=False_world=basic_size=20/trial=0/q-table_eval=last.npz"
     exp_settings = {
+        # CORE EXPTS 
         # "q-learning_termphi0=False": {
         #     "termphi0": False
         # },
@@ -63,7 +64,7 @@ def run_gridworld_expts(trials=30, overwrite=False):
         #     "state_aug": True, 
         #     "relabel": True,
         #     "termphi0": False 
-        #               },
+        # },
         # "pbrs_alone_termphi0=False": {
         #     "reward_type": "pbrs_demo",
         #     "demo_style": "lower",
@@ -75,7 +76,7 @@ def run_gridworld_expts(trials=30, overwrite=False):
         #     "state_aug": True,
         #     "termphi0": False
         # },
-        # "ridm-state-aug-alone_termphi0=False": {
+        # "ridm-state-aug-alone_termphi0=False_random-act-prob=0.1": {
         #     "demo_style": "lower",
         #     "state_aug": True,
         #     "termphi0": False
@@ -113,12 +114,35 @@ def run_gridworld_expts(trials=30, overwrite=False):
         #     "termphi0": False,
         # },
 
-        "pbrs_alone": {
+        # "pbrs_alone": {
+        #     "reward_type": "pbrs_demo",
+        #     "demo_style": "lower",
+        #     "termphi0": False
+        # },
+        ## DShape with heuristic potentials: 
+        # "dshape_euclidean_termphi0=False": {
+        #     "reward_type": "pbrs_demo_euclidean",
+        #     "demo_style": "lower",
+        #     "state_aug": True, 
+        #     "relabel": True,
+        #     "termphi0": False 
+        #               },
+        # "dshape_manhattan_pot-coef=2_termphi0=False": { # mult 2 
+        #     "reward_type": "pbrs_demo",
+        #     "demo_style": "lower",
+        #     "state_aug": True, 
+        #     "relabel": True,
+        #     "termphi0": False, 
+        #     "rew_coef": 2
+        # },
+        "dshape_manhattan_pot-const=1_termphi0=False": { # add 1
             "reward_type": "pbrs_demo",
             "demo_style": "lower",
-            # "termphi0": False
+            "state_aug": True, 
+            "relabel": True,
+            "termphi0": False, 
+            "potential_const": 1
         },
-
         ## transfer learning experiment on 20x20 gridworld ###
         # "dshape_termphi0=False_demo-goal=15_grid-goal=15": { # learn from scratch
         #     "gridworld_goal": (0, 15),
@@ -213,14 +237,15 @@ def run_gridworld_expts(trials=30, overwrite=False):
         #     "demo_style": "lower",
         #     "state_aug": True,
         # },
-
     }
 
     world_dependent_params = {
+                  5: {"total_train_ts": 1000000,
+                       "eval_interval": 2500, # evaluation frequency in ts
+                  },
                   10: {"total_train_ts": 2000000,
                        "eval_interval": 5000, # evaluation frequency in ts
-
-                                    },  # 2000000 timesteps should be okay
+                  },  # 2000000 timesteps should be okay
                   20: {"total_train_ts": 10000000,
                       "eval_interval": 10000, # evaluation frequency in ts
                       # "save_steps": (3, 7, 20), # n_evals to save q-table at
@@ -238,20 +263,23 @@ def run_gridworld_expts(trials=30, overwrite=False):
     results_dir = paths['rl_demo']['gridworld_results_dir']
 
     for gridworld_size in [
-                           # 10, 
+                           # 5, 
+                           10, 
                            20, 
-                           # 30
+                           30
                            ]:
         for exp_name, exp_params in exp_settings.items():
             # for i in range(1, 4):
+                # demo_goal = gridworld_size - 1 - subopt_demo_dict[gridworld_size]["subopt_step"]*i
+                # exp_params["demo_goal"] = (0, demo_goal)
+            # for i in [1, 3, 5]:
+                # exp_params["demo_extend_type"] = "extend_all"
+                # exp_params["demo_extend_num"] = i
+                # exp_params["demo_num_missing"] = i
 
-            # for i in range(4, 10):
-            #     demo_goal = gridworld_size-1-subopt_demo_dict[gridworld_size]["subopt_step"]*i
-            #     exp_params["demo_goal"] = (0, demo_goal)
-            demo_goal = "15.0"
-            exp_params["demo_goal"] = (15, 0)
-            # savedir_name = f"{exp_name}_world=basic_size={gridworld_size}"
-            savedir_name = f"{exp_name}_demo-goal={demo_goal}_world=basic_size={gridworld_size}"
+            savedir_name = f"{exp_name}_world=basic_size={gridworld_size}"
+            # savedir_name = f"{exp_name}_demo-goal={demo_goal}_world=basic_size={gridworld_size}"
+            # savedir_name = f"{exp_name}_demo-num-missing={i}_world=basic_size={gridworld_size}"
 
             for trial_idx in range(trials):
                 all_params = {

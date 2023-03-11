@@ -1,3 +1,4 @@
+import math
 import numpy as np
 from gym import Wrapper, spaces
 from scipy.spatial import cKDTree as KDTree
@@ -5,6 +6,10 @@ from scipy.spatial import cKDTree as KDTree
 
 def manhattan_dist(state0, state1):
     dist = abs(state0[0] - state1[0]) + abs(state0[1] - state1[1])
+    return dist
+
+def euclidean_dist(state0, state1):
+    dist = math.sqrt((state0[0] - state1[0])**2 + (state0[1] - state1[1])**2)
     return dist
 
 def normalize(x, size):
@@ -19,7 +24,7 @@ def compute_sbs_phi(exp_kdtree, query_state, dist_scale):
 
 
 class DemoWrappedGridworld(Wrapper):
-    def __init__(self, env, demo=None, reward_type=None, rew_coef=1, dist_scale=1, gamma=1, 
+    def __init__(self, env, demo=None, reward_type=None, rew_coef=1, potential_const=0, dist_scale=1, gamma=1, 
         negate_potential=False, state_aug=False, termphi0=True):
         super(DemoWrappedGridworld, self).__init__(env)
 
@@ -30,10 +35,11 @@ class DemoWrappedGridworld(Wrapper):
 
         # 
         self.rew_coef = rew_coef
+        self.potential_const = potential_const
         self.gamma = gamma
 
         self.reward_type = reward_type
-        assert reward_type in [None, "ng_phi0", "ng_0.5phi0", "pbrs_demo", "sbs", "manhattan"]
+        assert reward_type in [None, "ng_phi0", "ng_0.5phi0", "pbrs_demo", "pbrs_demo_euclidean", "sbs", "manhattan"]
         self.potential_fcn = None
         # assumes static gold location
         if self.reward_type == "ng_phi0":
@@ -41,10 +47,15 @@ class DemoWrappedGridworld(Wrapper):
         elif self.reward_type == "ng_0.5phi0":
             self.potential_fcn = lambda state: - 0.5 * (manhattan_dist(state, self.env.goal) / 0.8)
         elif self.reward_type == "pbrs_demo":
-#             self.potential_fcn = lambda state, t: - manhattan_dist(state, demo[t])
             def f(state, goal):
-                return - manhattan_dist(state, goal)
+                return - manhattan_dist(state, goal) + self.potential_const
             self.potential_fcn = f
+
+        elif self.reward_type == "pbrs_demo_euclidean":
+            def f(state, goal):
+                return - euclidean_dist(state, goal) + self.potential_const
+            self.potential_fcn = f
+
         elif self.reward_type == "sbs":
             self.dist_scale = dist_scale
             self.exp_kdtree = KDTree(normalize(np.array(self.demo), self.env.size))
@@ -102,7 +113,7 @@ class DemoWrappedGridworld(Wrapper):
         """Conducts potential based reward shaping""" 
         if self.reward_type is None:
             F = 0
-        if self.reward_type == "pbrs_demo":
+        if self.reward_type in ["pbrs_demo", "pbrs_demo_euclidean"]:
             if done and self.termphi0: # set potential of new state to 0
                 F = - self.potential_fcn(old_state, old_goal_state)
             else:

@@ -7,6 +7,6 @@ train_sample_paths:
   # random_save_dir: "../data/random_traj" 
 rl_demo: 
   # results_dir: "/scratch/cluster/clw4542/temp/"
-  results_dir: "/scratch/cluster/clw4542/dshape_td3_results/"
+  results_dir: "/scratch/cluster/clw4542/pointworld_td3_results/"
   gridworld_results_dir: "/scratch/cluster/clw4542/gridworld_results2/" # "/scratch/cluster/clw4542/gridworld_results/"
   hyperparam_results_dir: "/scratch/cluster/clw4542/hyperparam_search/"
